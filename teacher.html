@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>%teacher%</title>
+    <link rel="icon" href="https://i.imgur.com/CsVKESW.jpg"> <!-- Подставьте ссылку на вашу иконку -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        th {
+            background: #b0e0e6;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        form {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .title {
+            flex-grow: 1;
+            text-align: center;
+        }
+
+        .license {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .logo {
+            max-width: 100px; /* Задаем максимальную ширину по вашему выбору */
+        }
+    </style>
+</head>
+
+<body>
+  <div class="header">
+        <img src="https://i.imgur.com/CsVKESW.jpg" alt="Лого" class="logo"> <!-- Подставьте путь к вашей иконке -->
+        <h1 class="title">Lessons for %teacher%</h1>
+        <a href="license.html" class="license">License</a>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Time</th>
+                <th>Lesson</th>
+                <th>Class</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="3" style="background-color: blanchedalmond">Monday</td>
+            </tr>
+            <tr>
+                %monday%
+            </tr>
+            <tr>
+                <td colspan="3" style="background-color: blanchedalmond">Tuesday</td>
+            </tr>
+            <tr>
+                %tuesday%
+            </tr>
+            <tr>
+                <td colspan="3" style="background-color: blanchedalmond">Wednesday</td>
+            </tr>
+            <tr>
+                %wednesday%
+            </tr>
+            <tr>
+                <td colspan="3" style="background-color: blanchedalmond">Thursday</td>
+            </tr>
+            <tr>
+                %thursday%
+            </tr>
+            <tr>
+                <td colspan="3" style="background-color: blanchedalmond">Friday</td>
+            </tr>
+            <tr>
+                %friday%
+            </tr>
+            <tr>
+                <td colspan="3" style="background-color: blanchedalmond">Saturday</td>
+            </tr>
+            <tr>
+                %saturday%
+            </tr>
+            <tr>
+                <td colspan="3" style="background-color: blanchedalmond">Sunday</td>
+            </tr>
+            <tr>
+                %sunday%
+            </tr>
+        </tbody>
+    </table>
+    <form action="/">
+        <button type="submit">Return to homepage</button>
+    </form>
+</body>
+
+</html>

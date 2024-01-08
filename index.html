@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TimeTable</title>
+	<link rel="icon" href="https://i.imgur.com/CsVKESW.jpg"> <!-- Подставьте ссылку на вашу иконку -->
+    <style type="text/css">
+	@import url("https://fonts.googleapis.com/css?family=Roboto+Mono");
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+        }
+
+        .lessons {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #FFF;
+        }
+
+    .btn {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        padding: 8px 16px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+        .btn:hover {
+            background-color: #42A5F5;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .title {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .license {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+		.logo {
+            max-width: 100px; /* Задаем максимальную ширину по вашему выбору */
+        }
+     </style>
+</head>
+<body>
+	<div class="header">
+        <img src="https://i.imgur.com/CsVKESW.jpg" alt="Лого" class="logo"> <!-- Подставьте путь к вашей иконке -->
+        <h1 class="title">Lessons timetable</h1>
+        <a href="license.html" class="license">License</a>
+    </div>
+	<div class="table">
+		<table>
+			<tbody>
+				<tr>
+					%body%
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
