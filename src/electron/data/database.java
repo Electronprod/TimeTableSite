@@ -100,6 +100,13 @@ public class database {
 	public static JSONObject get() {
 		return config;
 	}
+	/**
+	 * Get teacher's lessons for day and class
+	 * @param teacher -teacher name
+	 * @param dayID - day ID (1-7)
+	 * @param classname
+	 * @return JSONArray teacherlessons
+	 */
 	public static JSONArray getTeacherLessons(String teacher,int dayID,String classname) {
 				JSONArray arr = new JSONArray();
 				//Parsing all lessons
@@ -114,6 +121,11 @@ public class database {
 				}
 		return arr;
 	}
+	/**
+	 * Bring the name back to normal
+	 * @param name (for example "alexander d.")
+	 * @return formatted name (example - "Alexander D.")
+	 */
 	public static String getNormalName(String name) {
 		String[] words = name.split(" ");
         StringBuilder stringBuilder = new StringBuilder();
@@ -124,5 +136,30 @@ public class database {
                          .append(" ");
         }
         return stringBuilder.toString().trim();
+	}
+	/**
+	 * Get teacher's lessons for day
+	 * @param dayID
+	 * @param teacher
+	 * @return JSONArray lessons
+	 */
+	public static JSONArray getDayLessonsTeacher(int dayID,String teacher) {
+		JSONArray arr = new JSONArray();
+		//Checking all classes
+		for(String classname : database.getClasses()) {
+			//Parsing all lessons
+			JSONArray lessons = database.getDay(dayID, classname);
+			//Checking for teacher in this day
+			if(!lessons.toString().toLowerCase().contains(teacher.toLowerCase())) {
+				continue;
+			}
+			//Adding all lessons to array
+			for(Object obj : database.getTeacherLessons(teacher, dayID, classname)) {
+				JSONObject lesson = (JSONObject) obj;
+				lesson.put("class", classname);
+				arr.add(lesson);
+			}
+		}
+		return JSONSort.sort(arr);
 	}
 }

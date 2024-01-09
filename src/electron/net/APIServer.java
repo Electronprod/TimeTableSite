@@ -48,8 +48,16 @@ class ApiHandler implements HttpHandler {
     			NetUtils.sendResponse(exchange, genHTML(database.getDay(Integer.parseInt(multirequest[1]), multirequest[2]).toJSONString()), 200);
     		case "getdayraw":
     			NetUtils.sendResponse(exchange, database.getDay(Integer.parseInt(multirequest[1]), multirequest[2]).toJSONString(), 200);
+    		case "getteacherlessonsraw":
+    			NetUtils.sendResponse(exchange, database.getTeacherLessons(multirequest[3], Integer.parseInt(multirequest[1]), multirequest[2]).toJSONString(), 200);
+    		case "getdaylessonsteacherraw":
+    			NetUtils.sendResponse(exchange, database.getDayLessonsTeacher(Integer.parseInt(multirequest[1]), multirequest[2]).toJSONString(), 200);
+    		case "getteacherlessons":
+    			NetUtils.sendResponse(exchange, genHTML(database.getTeacherLessons(multirequest[3], Integer.parseInt(multirequest[1]), multirequest[2]).toJSONString()), 200);
+    		case "getdaylessonsteacher":
+    			NetUtils.sendResponse(exchange, genHTML(database.getDayLessonsTeacher(Integer.parseInt(multirequest[1]), multirequest[2]).toJSONString()), 200);
     		default:
-    			NetUtils.sendResponse(exchange, genHTML("Unknown command."), 200);
+    			NetUtils.sendResponse(exchange, "Unknown command.", 200);
     		}
     		return;
     	}
@@ -64,7 +72,7 @@ class ApiHandler implements HttpHandler {
     	case "getclassesraw":
     		NetUtils.sendResponse(exchange, database.getJSONClasses().toJSONString(), 200);
     	default:
-    		NetUtils.sendResponse(exchange, genHTML("Unknown command."), 200);
+    		NetUtils.sendResponse(exchange, "Unknown command.", 200);
     	}
     }
     private String genHTML(String data) {

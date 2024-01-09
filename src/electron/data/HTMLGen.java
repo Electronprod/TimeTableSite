@@ -96,23 +96,7 @@ public class HTMLGen {
 		//Checking all days
 		for(int dayID=1;dayID<=7;dayID++) {
 			String HTML = "";
-			JSONArray arr = new JSONArray();
-			//Checking all classes
-			for(String classname : database.getClasses()) {
-				//Parsing all lessons
-				JSONArray lessons = database.getDay(dayID, classname);
-				//Checking for teacher in this day
-				if(!lessons.toString().toLowerCase().contains(teacher.toLowerCase())) {
-					continue;
-				}
-				//Adding all lessons to array
-				for(Object obj : database.getTeacherLessons(teacher, dayID, classname)) {
-					JSONObject lesson = (JSONObject) obj;
-					lesson.put("class", classname);
-					arr.add(lesson);
-				}
-			}
-			arr = JSONSort.sort(arr);
+			JSONArray arr = database.getDayLessonsTeacher(dayID, teacher);
 			//Generating HTML
 			for(Object obj : arr) {
 				JSONObject lesson = (JSONObject) obj;
