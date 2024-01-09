@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class logger {
 	//Enable/Disable debug
-	public static boolean enDebug = true;
+	public static boolean enDebug = false;
 	
 	public static void log(String msg) {
 		System.out.println(msg);

@@ -11,10 +11,7 @@ public class SchoolTimeTableSite {
 	public static void main(String[] args) {
 		//Program settings loading
 		logger.log("Loading TimeTableSite...");
-		if(args.length>0 && args[0].toLowerCase().equals("-debug")) {
-			logger.enDebug=true;
-			logger.log("[LOGGER]: debug enabled.");
-		}
+		logger.enDebug=false;
 		//Resources loading
 		database.load();
 		HTMLGen.load();
