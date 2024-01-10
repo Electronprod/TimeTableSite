@@ -24,6 +24,7 @@ public class database {
 		FileOptions.loadFile(confFile);
 	    if (FileOptions.getFileLines(confFile.getPath().toString()).isEmpty()) {
 	    	System.err.println("[RESOURCE_SYSTEM]: database isn't configured. Please, use configurator application.");
+	    	confFile.delete();
 	    	System.exit(0);
 	    }
 	    //Loading all file data in memory for speed
