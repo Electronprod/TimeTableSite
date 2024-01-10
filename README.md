@@ -5,7 +5,7 @@
 <img width="948" alt="image" src="https://github.com/Electronprod/RemoteControl_Server/assets/80621922/f90f120b-6263-427b-9cdd-1b9f58695c17">
 
 ## 📙 Requirement
-* Make sure you have Java 8 or higher version installed.
+* Make sure you have Java 11 or higher version installed.
 
 ## ⚙️ Setup
 1. Download latest release of program
