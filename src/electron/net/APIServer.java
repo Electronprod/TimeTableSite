@@ -11,9 +11,9 @@ import electron.data.database;
 
 public class APIServer {
 
-	public APIServer() {
+	public APIServer(int port) {
 		try {
-			start();
+			start(port);
 		} catch (NumberFormatException | IOException e) {
 			// TODO Автоматически созданный блок catch
 			e.printStackTrace();
@@ -23,8 +23,8 @@ public class APIServer {
 			System.exit(1);
 		}
 	}
-	private void start() throws NumberFormatException, IOException {
-		HttpServer server = HttpServer.create(new InetSocketAddress(Integer.parseInt(String.valueOf(database.getApiSettings().get("port")))), 0);
+	private void start(int port) throws NumberFormatException, IOException {
+		HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 		server.createContext("/", new ApiHandler());
 		server.setExecutor(null);	
         server.start();

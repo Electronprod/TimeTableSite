@@ -13,16 +13,16 @@ import electron.data.database;
 
 public class SiteServer {
 
-	public SiteServer() {
+	public SiteServer(int port) {
 		try {
-			start();
+			start(port);
 		} catch (NumberFormatException | IOException e) {
 			// TODO Автоматически созданный блок catch
 			e.printStackTrace();
 		}
 	}
-	private void start() throws NumberFormatException, IOException {
-		HttpServer server = HttpServer.create(new InetSocketAddress(Integer.parseInt(String.valueOf(database.getSiteSettings().get("port")))), 0);
+	private void start(int port) throws NumberFormatException, IOException {
+		HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
 		server.createContext("/", new SiteHandler());
 		server.setExecutor(null);	
         server.start();

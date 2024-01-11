@@ -1,11 +1,15 @@
 package electron;
 
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import electron.console.logger;
 import electron.data.HTMLGen;
+import electron.data.config;
 import electron.data.database;
 import electron.net.APIServer;
+import electron.net.RemoteUploader;
 import electron.net.SiteServer;
 import library.electron.updatelib.ActionListener;
 import library.electron.updatelib.UpdateLib;
@@ -15,17 +19,36 @@ public class SchoolTimeTableSite {
 	public static void main(String[] args) throws MalformedURLException {
 		//Program settings loading
 		logger.log("Loading TimeTableSite...");
-		logger.enDebug=false;
+		//Parsing arguments
+        Map<String, String> arguments = new HashMap<>();
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].startsWith("-")) {
+                if (i + 1 < args.length && !args[i + 1].startsWith("-")) {
+                    arguments.put(args[i].substring(1), args[i + 1]);
+                    i++;
+                } else {
+                    arguments.put(args[i].substring(1), null);
+                }
+            }
+        }
+        if(arguments.containsKey("debug")) {
+        	logger.enDebug=true;
+		}
+		//Checking updates
 		checkUpdates();
 		//Resources loading
 		database.load();
+		config.load();
 		HTMLGen.load();
-		//Starting site
-		if(Boolean.parseBoolean(String.valueOf(database.getApiSettings().get("enabled")))) {
-			new APIServer();
+		//Starting network functions
+		if(Boolean.parseBoolean(String.valueOf(config.getAPISettings().get("enabled")))) {
+			new APIServer(Integer.parseInt(String.valueOf(config.getAPISettings().get("port"))));
 		}
-		if(Boolean.parseBoolean(String.valueOf(database.getSiteSettings().get("enabled")))) {
-			new SiteServer();
+		if(Boolean.parseBoolean(String.valueOf(config.getSiteSettings().get("enabled")))) {
+			new SiteServer(Integer.parseInt(String.valueOf(config.getSiteSettings().get("port"))));
+		}
+		if(Boolean.parseBoolean(String.valueOf(config.getRemoteUploaderSettings().get("enabled")))) {
+			new RemoteUploader(Integer.parseInt(String.valueOf(config.getRemoteUploaderSettings().get("port"))));
 		}
 	}
 	private static void checkUpdates() throws MalformedURLException {

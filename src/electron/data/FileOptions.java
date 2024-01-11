@@ -1,8 +1,11 @@
 package electron.data;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -56,22 +59,23 @@ public class FileOptions {
 	 * @param in - the string to be written
 	 * @param f - file to write
 	 */
-	  public static void writeFile(String in, File f) {
-		    for (; !f.canWrite() && !f.canRead(); LockSupport.parkNanos(100L));
-		    FileWriter fr = null;
-		    try {
-		      fr = new FileWriter(f);
-		      fr.write(in);
-		    } catch (IOException e) {
-		      e.printStackTrace();
-		    } finally {
-		      try {
-		        fr.close();
-		      } catch (IOException e) {
-		        e.printStackTrace();
-		      } 
-		    } 
-		  }
+		  public static void writeFile(String in, File f) {
+			    for (; !f.canWrite() && !f.canRead(); LockSupport.parkNanos(100L));
+			    Writer fr = null;
+			    try {
+			      fr = new OutputStreamWriter(new FileOutputStream(f), StandardCharsets.UTF_8);
+			      
+			      fr.write(in);
+			    } catch (IOException e) {
+			      e.printStackTrace();
+			    } finally {
+			      try {
+			        fr.close();
+			      } catch (IOException e) {
+			        e.printStackTrace();
+			      } 
+			    } 
+			  }
 	
 	/**
 	 * This method checks file for exists.

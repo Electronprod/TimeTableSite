@@ -23,43 +23,13 @@ public class database {
 		logger.debug("[RESOURCE_SYSTEM]: loading database...");
 		FileOptions.loadFile(confFile);
 	    if (FileOptions.getFileLines(confFile.getPath().toString()).isEmpty()) {
-	    	System.err.println("[RESOURCE_SYSTEM]: database isn't configured. Please, use configurator application.");
+	    	logger.error("[RESOURCE_SYSTEM]: database isn't configured. Please, use configurator application.");
 	    	confFile.delete();
 	    	System.exit(0);
 	    }
 	    //Loading all file data in memory for speed
 	    config = (JSONObject) FileOptions.ParseJs(FileOptions.getFileLine(confFile));
-	    //Checking config for errors
-	    if(Integer.parseInt(String.valueOf(getSiteSettings().get("port"))) == Integer.parseInt(String.valueOf(getApiSettings().get("port")))) {
-	    	if(Boolean.parseBoolean(String.valueOf(getSiteSettings().get("enabled"))) & Boolean.parseBoolean(String.valueOf(getApiSettings().get("port")))) {
-	    		logger.error("[RESOURCE_SYSTEM]: incorrect data loaded from config: API port equals SITE port.");
-	    		System.exit(1);
-	    	}
-	    	logger.debug("[RESOURCE_SYSTEM]: API port = SITE port, but one of them disabled.");
-	    }
 	    logger.debug("RESOURCE_SYSTEM]: done.");
-	}
-	/**
-	 * Get SITE settings
-	 * @return JSONObject
-	 */
-	public static JSONObject getSiteSettings() {
-		if(!config.containsKey("site")) {
-			logger.error("[RESOURCE_SYSTEM]: error loading data from config: site section missing.");
-			System.exit(1);
-		}
-		return (JSONObject) config.get("site");
-	}
-	/**
-	 * Get API settings
-	 * @return JSONObject
-	 */
-	public static JSONObject getApiSettings() {
-		if(!config.containsKey("api")) {
-			logger.error("[RESOURCE_SYSTEM]: error loading data from config: api section missing.");
-			System.exit(1);
-		}
-		return (JSONObject) config.get("api");
 	}
 	/**
 	 * Get all classes
@@ -162,5 +132,8 @@ public class database {
 			}
 		}
 		return JSONSort.sort(arr);
+	}
+	public static void write(String in) {
+		FileOptions.writeFile(in, confFile);
 	}
 }
