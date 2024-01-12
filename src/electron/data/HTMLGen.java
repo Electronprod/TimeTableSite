@@ -9,6 +9,8 @@ import org.json.simple.JSONObject;
 import electron.console.logger;
 
 public class HTMLGen {
+	private static String lasttime;
+	private static int counter;
 	private static String index="";
 	public static void load() {
 		if(checkFiles()) {
@@ -58,6 +60,8 @@ public class HTMLGen {
 			return "<th colspan=\"4\">There aren't lessons</th>";
 		}
 		String lessons=null;
+		counter=0;
+		lasttime="";
 		for(int i=0;i<lessonsarr.size();i++) {
 			lessons=lessons+generateLesson((JSONObject) lessonsarr.get(i),i+1);
 		}
@@ -67,6 +71,13 @@ public class HTMLGen {
 	
 	private static String generateLesson(JSONObject lesson,int num) {
 		String time = String.valueOf(lesson.get("time"));
+		if(time.equals(lasttime)) {
+			logger.debug("[GEN_LESSON]: found dublicate.");
+			counter++;
+		}else {
+			lasttime=time;
+		}
+		num=num-counter;
 		String name = String.valueOf(lesson.get("lesson"));
 		String teacher = String.valueOf(lesson.get("teacher"));
 		String btn="<form action=\"/teacher:"+teacher+" \">\r\n"

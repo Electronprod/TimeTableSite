@@ -1,0 +1,1 @@
+{"site":{"port":"80","enabled":"true"},"remote_uploader":{"password":"TimeTableSite","port":"90","login":"electron","enabled":"true"},"api":{"port":"81","enabled":"true"}}
