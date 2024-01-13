@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import electron.console.logger;
-import electron.data.HTMLGen;
+import electron.data.SimpleTimeTableGen;
+import electron.data.TimeTableGen;
 import electron.data.config;
 import electron.data.database;
 import electron.net.APIServer;
@@ -15,7 +16,7 @@ import library.electron.updatelib.ActionListener;
 import library.electron.updatelib.UpdateLib;
 
 public class SchoolTimeTableSite {
-	static final Double version = 1.1;
+	static final Double version = 1.3;
 	public static void main(String[] args) throws MalformedURLException {
 		//Program settings loading
 		logger.log("Loading TimeTableSite...");
@@ -39,7 +40,8 @@ public class SchoolTimeTableSite {
 		//Resources loading
 		database.load();
 		config.load();
-		HTMLGen.load();
+		TimeTableGen.load();
+		SimpleTimeTableGen.load();
 		//Starting network functions
 		if(Boolean.parseBoolean(String.valueOf(config.getAPISettings().get("enabled")))) {
 			new APIServer(Integer.parseInt(String.valueOf(config.getAPISettings().get("port"))));
@@ -62,7 +64,7 @@ public class SchoolTimeTableSite {
             	if(newversion>version) {
             		logger.error("-----------------[Update]-----------------");
             		logger.error("New version available: "+lastversion);
-            		logger.error("Release notes:");
+            		logger.error("");
             		logger.error(updater.getBody(versionobj));
             		logger.error("");
             		logger.error("Publish date: "+updater.getPublishDate(versionobj));

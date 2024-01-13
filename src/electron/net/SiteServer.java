@@ -8,7 +8,9 @@ import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 
 import electron.console.logger;
-import electron.data.HTMLGen;
+import electron.data.Search;
+import electron.data.SimpleTimeTableGen;
+import electron.data.TimeTableGen;
 import electron.data.database;
 
 public class SiteServer {
@@ -38,15 +40,22 @@ class SiteHandler implements HttpHandler {
     		teacherRequest(url,exchange);
     		return;
     	}
-        if(url.contains("js") || url.contains("css") || url.contains("html") || url.contains("scss")) {
+    	if(url.contains("search?name=")) {
+    		searchRequest(url, exchange);
+    		return;
+    	}
+        if(url.contains(".js") || url.contains(".css") || url.contains(".html") || url.contains(".scss")) {
         	//Request type - resources for page from browser
         	NetUtils.sendResponse(exchange,NetUtils.getResource(url),200);
         	return;
         }
-    	NetUtils.sendResponse(exchange, HTMLGen.getIndex(), 200);
+        if(url.equalsIgnoreCase("simpleview")) {
+        	NetUtils.sendResponse(exchange, SimpleTimeTableGen.get(), 200);
+        	return;
+        }
+    	NetUtils.sendResponse(exchange, TimeTableGen.getIndex(), 200);
     }
     private static void teacherRequest(String request,HttpExchange exchange) {
-    	logger.debug("[TEACHER_REQUEST]: finding...");
     	//Find teacher name
         String teacher = request.replace("teacher:", "");
         //In URI appears automatically "?". We need to delete it.
@@ -59,8 +68,21 @@ class SiteHandler implements HttpHandler {
         	return;
         }
         //teacher exists - sending teacher page
-        String anser = HTMLGen.generateTeacher(teacher);
+        String anser = TimeTableGen.generateTeacher(teacher);
         NetUtils.sendResponse(exchange,anser,200);
         logger.debug("[TEACHER_REQUEST]: teacher found, sent page to remote user.");
+    }
+    private static void searchRequest(String request,HttpExchange exchange) {
+    	//Find teacher name
+        String teacher = request.replace("search?name=", "");
+        logger.debug("[SEARCH_REQUST][1]: finding teacher: "+teacher);
+        //In URI appears automatically "?". We need to delete it.
+        if(teacher.contains("?")) {
+        	teacher=teacher.replaceAll("?", "");
+        }
+        //Find most similar string from database
+    	String found = Search.findMostSimilarString(teacher, TimeTableGen.getTeachers());
+    	logger.debug("[SEARCH_REQUST] found: "+ found);
+    	teacherRequest(found, exchange);
     }
 }

@@ -2,20 +2,24 @@ package electron.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import electron.console.logger;
 
-public class HTMLGen {
+public class TimeTableGen {
 	private static String lasttime;
 	private static int counter;
 	private static String index="";
+	private static List<String> teachers  = new ArrayList();
 	public static void load() {
 		if(checkFiles()) {
 			try {
 				index = generatePage();
+				teachers=SimpleTimeTableGen.removeDuplicates(teachers);
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.exit(1);
@@ -28,7 +32,9 @@ public class HTMLGen {
 	public static String getIndex() {
 		return index;
 	}
-	
+	public static List<String> getTeachers(){
+		return teachers;
+	}
 	private static String generatePage() throws IOException {
 		String index = FileOptions.getFileLine(new File("index.html"));
 		String gen="";
@@ -38,6 +44,7 @@ public class HTMLGen {
 			gen=gen+"</div>";
 		}
 		index = index.replace("%body%", gen);
+		index = index.replace("%viewlink%", "simpleview");
 		index = index.replaceAll("null", "");
 		return index;
 	}
@@ -57,7 +64,7 @@ public class HTMLGen {
 	private static String generateLessons(int dayID,String classname) {
 		JSONArray lessonsarr = database.getDay(dayID, classname.toLowerCase());
 		if(lessonsarr == null) {
-			return "<th colspan=\"4\">There aren't lessons</th>";
+			return "";
 		}
 		String lessons=null;
 		counter=0;
@@ -65,14 +72,13 @@ public class HTMLGen {
 		for(int i=0;i<lessonsarr.size();i++) {
 			lessons=lessons+generateLesson((JSONObject) lessonsarr.get(i),i+1);
 		}
-		if(lessons==null) {return "<th colspan=\"4\">There aren't lessons</th>";}
+		if(lessons==null) {return "";}
 		return lessons;
 	}
 	
 	private static String generateLesson(JSONObject lesson,int num) {
 		String time = String.valueOf(lesson.get("time"));
 		if(time.equals(lasttime)) {
-			logger.debug("[GEN_LESSON]: found dublicate.");
 			counter++;
 		}else {
 			lasttime=time;
@@ -80,6 +86,8 @@ public class HTMLGen {
 		num=num-counter;
 		String name = String.valueOf(lesson.get("lesson"));
 		String teacher = String.valueOf(lesson.get("teacher"));
+		//For search system
+		teachers.add(teacher);
 		String btn="<form action=\"/teacher:"+teacher+" \">\r\n"
 				+ "            <button  class=\"btn\" type=\"submit\">"+database.getNormalName(teacher)+"</button>\r\n"
 				+ "        </form>";
@@ -96,6 +104,9 @@ public class HTMLGen {
 			return false;
 		}
 		if(!new File("404.html").exists()) {
+			return false;
+		}
+		if(!new File("lessonstable.html").exists()) {
 			return false;
 		}
 		return true;

@@ -9,7 +9,8 @@ import org.json.simple.JSONObject;
 
 import electron.console.logger;
 import electron.data.FileOptions;
-import electron.data.HTMLGen;
+import electron.data.SimpleTimeTableGen;
+import electron.data.TimeTableGen;
 import electron.data.config;
 import electron.data.database;
 
@@ -45,7 +46,9 @@ class userThread extends Thread{
 		try {
 			if(!logIn()) {
 				logger.error("[RemoteUploader]: incorrect login data from "+client.getInetAddress());
+				sendData("0");
 				client.close();return;}
+			sendData("1");
 			DataInputStream in = new DataInputStream(this.client.getInputStream());
 		    String str = in.readUTF();
 		    JSONObject indata = (JSONObject) FileOptions.ParseJs(str);
@@ -53,7 +56,8 @@ class userThread extends Thread{
 		    database.write(data);
 		    logger.log("[RemoteUploader]: wrote: "+data);
 		    database.load();
-		    HTMLGen.load();
+		    TimeTableGen.load();
+		    SimpleTimeTableGen.load();
 		    client.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -73,7 +77,7 @@ class userThread extends Thread{
 		    String login = (String) info.get("login");
 		    String password = (String) info.get("password");
 		    String correctLogin = String.valueOf(config.getRemoteUploaderSettings().get("login"));
-		    String correctPassword = String.valueOf(config.getRemoteUploaderSettings().get("password"));
+		    String correctPassword = ""+ String.valueOf(config.getRemoteUploaderSettings().get("password")).hashCode();
 		    if(correctLogin.equals(login)) {
 		    	if(correctPassword.equals(password)) {
 		    		return true;
