@@ -125,4 +125,15 @@ public class FileOptions {
 		      return null;
 		    } 
 		  }
+		 /**
+		  * JSON format checker & loader
+		  * 
+		  * @param d - string in JSON format
+		  * @return Object JSON
+		 * @throws ParseException 
+		  */
+		  public static Object ParseJsThrows(String d) throws ParseException {
+			   Object obj = (new JSONParser()).parse(d);
+			   return obj;
+			  }
 }

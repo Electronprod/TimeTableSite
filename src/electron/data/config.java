@@ -20,7 +20,7 @@ public class config {
 	    if (FileOptions.getFileLines(settingsFile.getPath().toString()).isEmpty()) {
 	    	logger.debug("[RESOURCE_SYSTEM]: writing default settings.");
 	    	writeDefaultSettings();
-	    	logger.error("[RESOURCE_SYSTEM]: don't forget to configure file settings.json");
+	    	logger.warn("[RESOURCE_SYSTEM]: don't forget to configure file settings.json");
 	    	return;
 	    }
 	    //Loading all file data in memory for speed

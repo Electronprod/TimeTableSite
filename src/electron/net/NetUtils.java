@@ -32,7 +32,7 @@ public class NetUtils {
             return request;
         } catch (UnsupportedEncodingException e) {
             // not going to happen - value came from JDK's own StandardCharsets
-        	logger.error("[NetUtils]: Error decoding incoming url.");
+        	logger.warn("[NetUtils]: Error decoding incoming url.");
         	return "/";
         }
    }
@@ -50,8 +50,7 @@ public class NetUtils {
 		    outputStream.write(response.getBytes());
 		    outputStream.close();
 	    } catch (IOException e) {
-			e.printStackTrace();
-			logger.error("[NetUtils]: error sending data to browser: "+e.getMessage());
+			logger.warn("[NetUtils]: "+e.getMessage());
 		}
 	}
 	/**

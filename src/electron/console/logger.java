@@ -1,30 +1,31 @@
 package electron.console;
 
-import java.util.Scanner;
+import static org.fusesource.jansi.Ansi.*;
+
+import java.io.File;
+import java.util.Date;
+
+import electron.data.FileOptions;
 
 public class logger {
 	//Enable/Disable debug
 	public static boolean enDebug = false;
-	
-	public static void log(String msg) {
-		System.out.println(msg);
+	private static Date date = new Date();
+	public static void log(Object msg) {
+		System.out.println(getTime()+" INFO: "+msg);
 	}
-	public static void debug(String msg) {
+	public static void warn(Object msg) {
+		System.out.println(ansi().fgYellow().a(getTime()+" WARN: "+msg).reset());
+	}
+	public static void debug(Object msg) {
 		if(!enDebug) {return;}
-		System.out.println("[DEBUG]"+msg);
+		System.out.println(ansi().fgGreen().a(getTime()+" DEBUG: "+msg).reset());
 	}
-	public static void error(String msg) {
-		System.err.println(msg);
+	public static void error(Object msg) {
+		System.out.println(ansi().fgRed().a(getTime()+" ERROR: "+msg).reset());
 	}
-	public static boolean askBool(String msg) {
-		Scanner sc = new Scanner(System.in);
-		System.out.println(msg);
-		String answer = sc.nextLine();
-		sc.close();
-		if(answer.contains("y")) {
-			return true;
-		}else{
-			return false;
-		}
+	private static String getTime() {
+		date.setTime(System.currentTimeMillis());
+		return date.getHours()+":"+date.getMinutes()+":"+date.getSeconds();
 	}
 }

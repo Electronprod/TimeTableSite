@@ -17,4 +17,6 @@
 ## ⚖️ License
 **TimeTableSite** is distributed under the *[MIT](https://opensource.org/licenses/MIT)*.
 
-Used JSON.simple library (Apache 2.0): *[CLICK](https://github.com/fangyidong/json-simple?tab=Apache-2.0-1-ov-file)*
+Used **JSON.simple** library (Apache 2.0): *[CLICK](https://github.com/fangyidong/json-simple?tab=Apache-2.0-1-ov-file)*
+
+Used **jansi** library (Apache 2.0): *[CLICK](https://github.com/fusesource/jansi/blob/master/license.txt)*

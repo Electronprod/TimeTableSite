@@ -4,6 +4,11 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.fusesource.jansi.AnsiConsole;
+
+import static org.fusesource.jansi.Ansi.*;
+import static org.fusesource.jansi.Ansi.Color.*;
+
 import electron.console.logger;
 import electron.data.SimpleTimeTableGen;
 import electron.data.TimeTableGen;
@@ -16,10 +21,10 @@ import library.electron.updatelib.ActionListener;
 import library.electron.updatelib.UpdateLib;
 
 public class SchoolTimeTableSite {
-	static final Double version = 1.3;
+	static final Double version = 1.4;
 	public static void main(String[] args) throws MalformedURLException {
-		//Program settings loading
-		logger.log("Loading TimeTableSite...");
+		AnsiConsole.systemInstall();
+		logger.log("Loading TimeTableSite v"+version);
 		//Parsing arguments
         Map<String, String> arguments = new HashMap<>();
         for (int i = 0; i < args.length; i++) {
@@ -34,6 +39,7 @@ public class SchoolTimeTableSite {
         }
         if(arguments.containsKey("debug")) {
         	logger.enDebug=true;
+        	logger.debug("DEBUG enabled.");
 		}
 		//Checking updates
 		checkUpdates();
@@ -62,16 +68,16 @@ public class SchoolTimeTableSite {
             	String lastversion = updater.getTagName(versionobj);
             	double newversion = Double.parseDouble(lastversion.replace("v", ""));
             	if(newversion>version) {
-            		logger.error("-----------------[Update]-----------------");
-            		logger.error("New version available: "+lastversion);
-            		logger.error("");
-            		logger.error(updater.getBody(versionobj));
-            		logger.error("");
-            		logger.error("Publish date: "+updater.getPublishDate(versionobj));
-            		logger.error("");
-            		logger.error("Download it:");
-            		logger.error(updater.getReleaseUrl(versionobj));
-            		logger.error("-----------------[Update]-----------------");
+            		logger.warn("-----------------[Update]-----------------");
+            		logger.warn("New version available: "+lastversion);
+            		logger.warn("");
+            		logger.warn(updater.getBody(versionobj));
+            		logger.warn("");
+            		logger.warn("Publish date: "+updater.getPublishDate(versionobj));
+            		logger.warn("");
+            		logger.warn("Download it:");
+            		logger.warn(updater.getReleaseUrl(versionobj));
+            		logger.warn("-----------------[Update]-----------------");
             	}else {
             		logger.log("[Updater] it's latest version.");
             	}
@@ -79,7 +85,7 @@ public class SchoolTimeTableSite {
 
 			@Override
 			public void updateFailed() {
-				System.err.println("[Updater] error checking updates.");
+				logger.warn("[Updater] error checking updates.");
 			}
         });
 	}

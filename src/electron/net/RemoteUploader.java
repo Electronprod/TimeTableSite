@@ -6,6 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.locks.LockSupport;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 import electron.console.logger;
 import electron.data.FileOptions;
@@ -20,9 +21,9 @@ public class RemoteUploader {
 		ServerSocket servSocket;
 		try {
 			servSocket = new ServerSocket(port);
+        	logger.log("[RemoteUploader]: opened port "+port);
 	        while (true) {
 	        	LockSupport.parkNanos(100);
-	        	logger.log("[RemoteUploader]: opened port "+port);
 	            Socket fromClientSocket = servSocket.accept();
 	            logger.log("[RemoteUploader]: Connected to "+ fromClientSocket.getRemoteSocketAddress());
 	            Thread t = new userThread(fromClientSocket);
@@ -32,7 +33,7 @@ public class RemoteUploader {
 	            logger.log("[RemoteUploader]:  Disconnected from remote client.");
 	        }
 		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
+			logger.warn("[RemoteUploader]: "+e.getMessage());
 		} 
 	}
 
@@ -45,19 +46,24 @@ class userThread extends Thread{
 	public void run() {
 		try {
 			if(!logIn()) {
-				logger.error("[RemoteUploader]: incorrect login data from "+client.getInetAddress());
+				logger.warn("[RemoteUploader]: incorrect login data from "+client.getInetAddress());
 				sendData("0");
 				client.close();return;}
 			sendData("1");
 			DataInputStream in = new DataInputStream(this.client.getInputStream());
 		    String str = in.readUTF();
-		    JSONObject indata = (JSONObject) FileOptions.ParseJs(str);
-		    String data = String.valueOf(indata.get("data"));
-		    database.write(data);
-		    logger.log("[RemoteUploader]: wrote: "+data);
-		    database.load();
-		    TimeTableGen.load();
-		    SimpleTimeTableGen.load();
+		    try {
+				JSONObject indata = (JSONObject) FileOptions.ParseJsThrows(str);
+			    String data = String.valueOf(indata.get("data"));
+			    database.write(data);
+			    logger.log("[RemoteUploader]: wrote: "+data);
+			    database.load();
+			    TimeTableGen.load();
+			    SimpleTimeTableGen.load();
+			} catch (ParseException e) {
+				logger.error("[RemoteUploader]: received data damaged or incorrect.");
+				logger.error("[RemoteUploader]: Exeption message: "+e.getMessage());
+			}
 		    client.close();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -72,17 +78,22 @@ class userThread extends Thread{
 			DataInputStream in = new DataInputStream(this.client.getInputStream());
 		    String str = in.readUTF();
 		    isConnected();
-		    logger.debug("[RemoteUploader]: login & pass received: "+str);
-		    JSONObject info = (JSONObject) FileOptions.ParseJs(str);
-		    String login = (String) info.get("login");
-		    String password = (String) info.get("password");
-		    String correctLogin = String.valueOf(config.getRemoteUploaderSettings().get("login"));
-		    String correctPassword = ""+ String.valueOf(config.getRemoteUploaderSettings().get("password")).hashCode();
-		    if(correctLogin.equals(login)) {
-		    	if(correctPassword.equals(password)) {
-		    		return true;
-		    	}
-		    }
+		    logger.debug("[RemoteUploader]: AUTH received: "+str);
+		    try {
+				JSONObject info = (JSONObject) FileOptions.ParseJsThrows(str);
+				String login = (String) info.get("login");
+			    String password = (String) info.get("password");
+			    String correctLogin = String.valueOf(config.getRemoteUploaderSettings().get("login"));
+			    String correctPassword = ""+ String.valueOf(config.getRemoteUploaderSettings().get("password")).hashCode();
+			    if(correctLogin.equals(login)) {
+			    	if(correctPassword.equals(password)) {
+			    		return true;
+			    	}
+			    }
+			} catch (ParseException e) {
+				logger.error("[RemoteUploader]: received AUTH data damaged or incorrect.");
+				logger.error("[RemoteUploader]: Exeption message: "+e.getMessage());
+			}
 		    return false;
 	}
 	private void isConnected() throws IOException {

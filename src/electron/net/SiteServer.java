@@ -19,8 +19,8 @@ public class SiteServer {
 		try {
 			start(port);
 		} catch (NumberFormatException | IOException e) {
-			// TODO Автоматически созданный блок catch
-			e.printStackTrace();
+			logger.error("[SiteServer]: "+e.getMessage());
+			System.exit(1);
 		}
 	}
 	private void start(int port) throws NumberFormatException, IOException {
@@ -34,7 +34,7 @@ public class SiteServer {
 class SiteHandler implements HttpHandler {
     public void handle(HttpExchange exchange) {
     	String url = NetUtils.getUrl(exchange).toLowerCase();
-    	logger.debug("[SiteServer]: request: "+url);
+    	logger.debug("[SiteServer]: request from "+exchange.getRemoteAddress()+": "+url);
     	url=url.replaceFirst("/", "");
     	if(url.contains("teacher:")) {
     		teacherRequest(url,exchange);
@@ -75,7 +75,7 @@ class SiteHandler implements HttpHandler {
     private static void searchRequest(String request,HttpExchange exchange) {
     	//Find teacher name
         String teacher = request.replace("search?name=", "");
-        logger.debug("[SEARCH_REQUST][1]: finding teacher: "+teacher);
+        logger.debug("[SEARCH_REQUST]: finding teacher: "+teacher);
         //In URI appears automatically "?". We need to delete it.
         if(teacher.contains("?")) {
         	teacher=teacher.replaceAll("?", "");

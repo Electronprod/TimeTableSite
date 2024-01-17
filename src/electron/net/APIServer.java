@@ -15,11 +15,7 @@ public class APIServer {
 		try {
 			start(port);
 		} catch (NumberFormatException | IOException e) {
-			// TODO Автоматически созданный блок catch
-			e.printStackTrace();
-			logger.error("--------------------------------");
-			logger.error("	 ERROR STARTING API SERVER");
-			logger.error("--------------------------------");
+			logger.error("[APIServer]: "+e.getMessage());
 			System.exit(1);
 		}
 	}
@@ -36,7 +32,7 @@ class ApiHandler implements HttpHandler {
     public void handle(HttpExchange exchange) {
     	//Parsing request
     	String url = NetUtils.getUrl(exchange).toLowerCase();
-    	logger.debug("[APIServer]: request: "+url);
+    	logger.debug("[APIServer]: request from "+exchange.getRemoteAddress()+": "+url);
     	url=url.replaceFirst("/", "");
     	url=url.toLowerCase();
     	if(url.contains("favicon.ico")) {return;}

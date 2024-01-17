@@ -20,12 +20,13 @@ public class TimeTableGen {
 			try {
 				index = generatePage();
 				teachers=SimpleTimeTableGen.removeDuplicates(teachers);
+				logger.debug("[TimeTableGen] generated page.");
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.exit(1);
 			}
 		}else {
-			logger.error("[HTMLGen]: required files missing. Check your installation.");
+			logger.error("[TimeTableGen]: required files missing. Check your installation.");
 			System.exit(1);
 		}
 	}

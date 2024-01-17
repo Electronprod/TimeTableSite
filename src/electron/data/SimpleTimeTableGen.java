@@ -11,11 +11,14 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import electron.console.logger;
+
 public class SimpleTimeTableGen {
 	private static String index="";
 	public static void load() {
 		try {
 			index = generatePage();
+			logger.debug("[SimpleTimeTableGen] generated page.");
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.exit(1);
