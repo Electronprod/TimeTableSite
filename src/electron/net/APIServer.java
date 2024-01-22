@@ -15,7 +15,8 @@ public class APIServer {
 		try {
 			start(port);
 		} catch (NumberFormatException | IOException e) {
-			logger.error("[APIServer]: "+e.getMessage());
+			logger.error("[APIServer]: error message: "+e.getMessage());
+			logger.error("[PROGRAM]: ApiServer has crashed. Program is shutting down.");
 			System.exit(1);
 		}
 	}

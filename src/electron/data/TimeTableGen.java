@@ -22,11 +22,10 @@ public class TimeTableGen {
 				teachers=SimpleTimeTableGen.removeDuplicates(teachers);
 				logger.debug("[TimeTableGen] generated page.");
 			} catch (IOException e) {
-				e.printStackTrace();
-				System.exit(1);
+				logger.error("[TimeTableGen] error generating page: "+e.getMessage());
 			}
 		}else {
-			logger.error("[TimeTableGen]: required files missing. Check your installation.");
+			logger.error("[TimeTableGen]: error: required files missing. Check your installation.");
 			System.exit(1);
 		}
 	}
@@ -79,12 +78,16 @@ public class TimeTableGen {
 	
 	private static String generateLesson(JSONObject lesson,int num) {
 		String time = String.valueOf(lesson.get("time"));
+		String number;
 		if(time.equals(lasttime)) {
 			counter++;
+			number = "";
+			num=num-counter;
 		}else {
 			lasttime=time;
+			num=num-counter;
+			number = String.valueOf(num);
 		}
-		num=num-counter;
 		String name = String.valueOf(lesson.get("lesson"));
 		String teacher = String.valueOf(lesson.get("teacher"));
 		//For search system
@@ -92,7 +95,7 @@ public class TimeTableGen {
 		String btn="<form action=\"/teacher:"+teacher+" \">\r\n"
 				+ "            <button  class=\"btn\" type=\"submit\">"+database.getNormalName(teacher)+"</button>\r\n"
 				+ "        </form>";
-		return "<tr><th>"+num+"</th><th>"+time+"</th><th>"+name+"</th><th>"+btn+"</th></tr>";
+		return "<tr><th>"+number+"</th><th>"+time+"</th><th>"+name+"</th><th>"+btn+"</th></tr>";
 	}
 	private static boolean checkFiles() {
 		if(!new File("index.html").exists()) {

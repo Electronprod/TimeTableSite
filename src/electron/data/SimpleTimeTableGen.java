@@ -20,8 +20,7 @@ public class SimpleTimeTableGen {
 			index = generatePage();
 			logger.debug("[SimpleTimeTableGen] generated page.");
 		} catch (IOException e) {
-			e.printStackTrace();
-			System.exit(1);
+			logger.error("[SimpleTimeTableGen] error generating page: "+e.getMessage());
 		}
 	}
 	public static String get() {

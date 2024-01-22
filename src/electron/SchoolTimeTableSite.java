@@ -9,6 +9,7 @@ import org.fusesource.jansi.AnsiConsole;
 import static org.fusesource.jansi.Ansi.*;
 import static org.fusesource.jansi.Ansi.Color.*;
 
+import electron.console.ConsoleCommandsExecutor;
 import electron.console.logger;
 import electron.data.SimpleTimeTableGen;
 import electron.data.TimeTableGen;
@@ -46,20 +47,24 @@ public class SchoolTimeTableSite {
 		//Resources loading
 		database.load();
 		config.load();
-		TimeTableGen.load();
-		SimpleTimeTableGen.load();
+		//Starting console
+		Thread consoleThread = new ConsoleCommandsExecutor();
+		consoleThread.start();
 		//Starting network functions
 		if(Boolean.parseBoolean(String.valueOf(config.getAPISettings().get("enabled")))) {
 			new APIServer(Integer.parseInt(String.valueOf(config.getAPISettings().get("port"))));
 		}
 		if(Boolean.parseBoolean(String.valueOf(config.getSiteSettings().get("enabled")))) {
+			//Loading HTML generators.
+			TimeTableGen.load();
+			SimpleTimeTableGen.load();
 			new SiteServer(Integer.parseInt(String.valueOf(config.getSiteSettings().get("port"))));
 		}
 		if(Boolean.parseBoolean(String.valueOf(config.getRemoteUploaderSettings().get("enabled")))) {
 			new RemoteUploader(Integer.parseInt(String.valueOf(config.getRemoteUploaderSettings().get("port"))));
 		}
 	}
-	private static void checkUpdates() throws MalformedURLException {
+	public static void checkUpdates() throws MalformedURLException {
 		UpdateLib updater = new UpdateLib("https://api.github.com/repos/Electronprod/TimeTableSite/releases");
 		updater.setActionListener(new ActionListener() {
             @Override

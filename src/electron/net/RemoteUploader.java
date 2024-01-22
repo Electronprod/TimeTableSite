@@ -30,10 +30,12 @@ public class RemoteUploader {
 	            t.start();
 	            t.join();
 	            fromClientSocket.close();
-	            logger.log("[RemoteUploader]:  Disconnected from remote client.");
+	            logger.log("[RemoteUploader]: Disconnected from remote client.");
 	        }
 		} catch (IOException | InterruptedException e) {
-			logger.warn("[RemoteUploader]: "+e.getMessage());
+			logger.error("[RemoteUploader]: error message: "+e.getMessage());
+			logger.warn("[RemoteUploader]: program will continue to work without RemoteUploader function.");
+			logger.warn("[RemoteUploader]: you can try to start RemoteUploader function with 'remoteuploader' command.");
 		} 
 	}
 
@@ -58,8 +60,10 @@ class userThread extends Thread{
 			    database.write(data);
 			    logger.log("[RemoteUploader]: wrote: "+data);
 			    database.load();
+			    if(Boolean.parseBoolean(String.valueOf(config.getSiteSettings().get("enabled")))) {
 			    TimeTableGen.load();
 			    SimpleTimeTableGen.load();
+			    }
 			} catch (ParseException e) {
 				logger.error("[RemoteUploader]: received data damaged or incorrect.");
 				logger.error("[RemoteUploader]: Exeption message: "+e.getMessage());
@@ -77,7 +81,6 @@ class userThread extends Thread{
 	private boolean logIn() throws IOException {
 			DataInputStream in = new DataInputStream(this.client.getInputStream());
 		    String str = in.readUTF();
-		    isConnected();
 		    logger.debug("[RemoteUploader]: AUTH received: "+str);
 		    try {
 				JSONObject info = (JSONObject) FileOptions.ParseJsThrows(str);
@@ -95,11 +98,5 @@ class userThread extends Thread{
 				logger.error("[RemoteUploader]: Exeption message: "+e.getMessage());
 			}
 		    return false;
-	}
-	private void isConnected() throws IOException {
-		if (!this.client.isConnected()) {
-	        this.client.close();
-	        Thread.currentThread().stop();
-	      } 
 	}
 }

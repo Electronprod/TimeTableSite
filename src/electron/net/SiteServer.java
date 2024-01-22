@@ -19,7 +19,8 @@ public class SiteServer {
 		try {
 			start(port);
 		} catch (NumberFormatException | IOException e) {
-			logger.error("[SiteServer]: "+e.getMessage());
+			logger.error("[SiteServer]: error message: "+e.getMessage());
+			logger.error("[PROGRAM]: SiteServer has crashed. Program is shutting down.");
 			System.exit(1);
 		}
 	}
