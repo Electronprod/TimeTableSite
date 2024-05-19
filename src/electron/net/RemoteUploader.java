@@ -25,6 +25,7 @@ public class RemoteUploader {
 	        while (true) {
 	        	LockSupport.parkNanos(100);
 	            Socket fromClientSocket = servSocket.accept();
+	            fromClientSocket.setSoTimeout(30000);
 	            logger.log("[RemoteUploader]: Connected to "+ fromClientSocket.getRemoteSocketAddress());
 	            Thread t = new userThread(fromClientSocket);
 	            t.start();
