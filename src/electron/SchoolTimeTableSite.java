@@ -22,7 +22,7 @@ import library.electron.updatelib.ActionListener;
 import library.electron.updatelib.UpdateLib;
 
 public class SchoolTimeTableSite {
-	static final Double version = 1.4;
+	static final Double version = 1.5;
 	public static void main(String[] args) throws MalformedURLException {
 		AnsiConsole.systemInstall();
 		logger.log("Loading TimeTableSite v"+version);
